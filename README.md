@@ -1,2 +1,7 @@
-# 4connect
-Initial version of a 4connect cli game
+Projektgruppe 1
+
+Groupmembers:
+- Jesse Reifert
+- Jan Kriegl
+- Fabio Hofstadler (SM)
+- Florian Klug
