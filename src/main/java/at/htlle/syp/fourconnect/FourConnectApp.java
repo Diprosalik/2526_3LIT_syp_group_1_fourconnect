@@ -6,7 +6,7 @@ import java.util.Arrays;
  * (c) Helmut Steineder
  */
 public class FourConnectApp {
-    public static final int ROWS = 6;
+    public static final int ROWS = 7;
     public static final int COLUMNS = 7;
     static final String BASELINE = "---------------";
 
@@ -60,7 +60,7 @@ public class FourConnectApp {
     {
         //We need to have the user tell us what column he wants
         //to drop a red into
-        System.out.println("Drop a red disk at column (0–6): ");
+        System.out.println("Drop a red disk at column (0–7): ");
 
         int column = columnInputInterface.getColumn();
 
