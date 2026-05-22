@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 /**
  * (c) Helmut Steineder
+ * (c) Reifert Jesse, Jan Kriegl, Florian Klug, Fabio Hofstadler
  */
 public class FourConnectApp {
     public static final int ROWS = 7;
@@ -77,7 +78,7 @@ public class FourConnectApp {
     //Same as the above step, just yellow
     public void dropYellowCoin()
     {
-        System.out.println("Drop a yellow disk at column (0–6): ");
+        System.out.println("Drop a yellow disk at column (0–7): ");
         int column = columnInputInterface.getColumn();
 
         for (int row = 0; row < ROWS; row++) {

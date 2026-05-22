@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * System test for four connect app
  */
-public class AppTest 
+public class FourConnectAppTest
 {
     private FourConnectApp app;
 
