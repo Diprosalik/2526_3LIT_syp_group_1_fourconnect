@@ -33,7 +33,7 @@ public class FourConnectAppTest
         System.out.println();
     }
 
-    @Disabled
+
     @Test
     public void runJamesBond()
     {

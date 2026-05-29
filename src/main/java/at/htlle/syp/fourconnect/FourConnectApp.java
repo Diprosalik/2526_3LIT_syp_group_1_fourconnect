@@ -9,7 +9,7 @@ import java.util.Arrays;
 public class FourConnectApp {
     public static final int ROWS = 7;
     public static final int COLUMNS = 7;
-    static final String BASELINE = "-----------------";
+    static final String BASELINE = "---------------";
 
     private boolean isRedTurn;
     private char[][] board = new char[ROWS][COLUMNS];
@@ -61,7 +61,7 @@ public class FourConnectApp {
     {
         //We need to have the user tell us what column he wants
         //to drop a red into
-        System.out.println("Drop a red disk at column (0–6): ");
+        System.out.println("Drop a red disk at column (0–7): ");
 
         int column = columnInputInterface.getColumn();
 
@@ -78,7 +78,7 @@ public class FourConnectApp {
     //Same as the above step, just yellow
     public void dropYellowCoin()
     {
-        System.out.println("Drop a yellow disk at column (0–6): ");
+        System.out.println("Drop a yellow disk at column (0–7): ");
         int column = columnInputInterface.getColumn();
 
         for (int row = 0; row < ROWS; row++) {
@@ -100,54 +100,56 @@ public class FourConnectApp {
     //and the various places where the line can be
     public Character checkWinner()
     {
-        // Horizontal check
-        for (int row = 0; row < ROWS; row++) {
-            for (int column = 0; column <= COLUMNS - 4; column++) {
+        //Time to look for the first type of winning line,
+        //a horizontal line
+        // Let's loop thru the rows and find potential winners
+        for (int row =0;row<ROWS;row++) {
+            // we need four coins in a row, hence we count up to COLUMNS - 4
+            for (int column = 0; column < COLUMNS - 3; column++) {
                 if (board[row][column] != ' '
                         && board[row][column + 1] == board[row][column]
                         && board[row][column + 2] == board[row][column]
-                        && board[row][column + 3] == board[row][column]) {
+                        && board[row][column + 3] == board[row][column])
                     return board[row][column];
-                }
             }
         }
 
-        // Vertical check
-        for (int column = 0; column < COLUMNS; column++) {
-            for (int row = 0; row <= ROWS - 4; row++) {
-                if (board[row][column] != ' '
-                        && board[row + 1][column] == board[row][column]
-                        && board[row + 2][column] == board[row][column]
-                        && board[row + 3][column] == board[row][column]) {
+        //For a vertical line, let's first loop over each column
+        for (int column=0;column<COLUMNS;column++)
+        {
+            for (int row =0;row<ROWS-3;row++)
+            {
+                if(board[row][column] != ' '
+                        && board[row+1][column] == board[row][column]
+                        && board[row+2][column] == board[row][column]
+                        && board[row+3][column] == board[row][column])
                     return board[row][column];
-                }
             }
         }
 
-        // Diagonal: top-left -> bottom-right
-        for (int row = 0; row <= ROWS - 4; row++) {
-            for (int column = 0; column <= COLUMNS - 4; column++) {
-                if (board[row][column] != ' '
-                        && board[row + 1][column + 1] == board[row][column]
-                        && board[row + 2][column + 2] == board[row][column]
-                        && board[row + 3][column + 3] == board[row][column]) {
+        // Now check diagonal line from left down to right
+        // We just need to check first 3 rows and first 4 cols
+        for (int row = 0; row < 3; row++) {
+            for (int column = 0; column < COLUMNS-3; column++) {
+                if(board[row][column] != ' '
+                        && board[row+1][column+1] == board[row][column]
+                        && board[row+2][column+2] == board[row][column]
+                        && board[row+3][column+3] == board[row][column])
                     return board[row][column];
-                }
             }
         }
 
-        // Diagonal: bottom-left -> top-right
-        for (int row = 3; row < ROWS; row++) {
-            for (int column = 0; column <= COLUMNS - 4; column++) {
-                if (board[row][column] != ' '
-                        && board[row - 1][column + 1] == board[row][column]
-                        && board[row - 2][column + 2] == board[row][column]
-                        && board[row - 3][column + 3] == board[row][column]) {
+        // Last but not least diagonal line from left up to right
+        // We just need to check first 3 rows and first 4 cols
+        for (int row = ROWS-1; row > ROWS-3; row--) {
+            for (int column = 0; column < COLUMNS-3; column++) {
+                if(board[row][column] != ' '
+                        && board[row-1][column+1] == board[row][column]
+                        && board[row-2][column+2] == board[row][column]
+                        && board[row-3][column+3] == board[row][column])
                     return board[row][column];
-                }
             }
         }
-
         return null;
     }
 
