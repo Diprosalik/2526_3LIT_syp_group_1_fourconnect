@@ -112,7 +112,7 @@ public class FourConnectApp {
         // Let's loop thru the rows and find potential winners
         for (int row =0;row<ROWS;row++) {
             // we need four coins in a row, hence we count up to COLUMNS - 4
-            for (int column = 0; column < COLUMNS - 3; column++) {
+            for (int column = 0; column < COLUMNS - 4; column++) {
                 if (board[row][column] != ' '
                         && board[row][column + 1] == board[row][column]
                         && board[row][column + 2] == board[row][column]
