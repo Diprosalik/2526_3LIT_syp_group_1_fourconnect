@@ -37,11 +37,14 @@ public class FourConnectAppTest
     @Test
     public void runJamesBond()
     {
-        printPreample("James Bond");
-        String testData = "007";
+        printPreample("James Bond quits the game");
+        String testData = "008"; // "008" bricht das Spiel beim dritten Zug (Rot) ab
         setup(testData);
-        app.runGame();
-        assertTrue( true );
+
+        Character winner = app.runGame();
+
+        // Das Spiel sollte abgebrochen worden sein -> kein Gewinner
+        assertNull(winner, "James Bond hätte das Spiel abbrechen müssen.");
     }
 
     @Test
@@ -91,7 +94,7 @@ public class FourConnectAppTest
 
         // erzeugt eine Diagonale von (3,0) bis (6,3) im 7x7 Board
         // checkWinner nutzt: board[row][column] == board[row+1][column+1]...
-        String testData = "0000111223";
+        String testData = "33322414454";
 
         setup(testData);
         Character winner = app.runGame();
@@ -112,7 +115,7 @@ public class FourConnectAppTest
 
         // Erzeugt eine ansteigende Diagonale von (6,0) bis (3,3)
         // checkWinner nutzt: board[row][column] == board[row-1][column+1]...
-        String testData = "3332210";
+        String testData = "60616253";
 
         setup(testData);
         Character winner = app.runGame();

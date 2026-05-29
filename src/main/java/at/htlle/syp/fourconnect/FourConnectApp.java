@@ -55,35 +55,42 @@ public class FourConnectApp {
         System.out.println(rowBuffer);
     }
 
+    public static final int EXIT_CODE = 8; // Für "008". Wenn es "007" sein soll, einfach in 7 ändern.
+    private boolean gameAborted = false;   // Flag, um den Abbruch zu tracken
+
     //Here's are basic move, making the lowest empty row
     //of a specific column have a Red
-    public void dropRedCoin()
-    {
-        //We need to have the user tell us what column he wants
-        //to drop a red into
-        System.out.println("Drop a red disk at column (0–7): ");
-
+    public void dropRedCoin() {
+        System.out.println("Drop a red disk at column (0–7) [or " + EXIT_CODE + " to quit]: ");
         int column = columnInputInterface.getColumn();
 
-        //Now that we know our column, we have to loop over each row from the bottom to the top
-        //till we find the first empty space, drop, and then finish (i.e., break) the move
+        // Überprüfung auf Abbruch-Code
+        if (column == EXIT_CODE) {
+            gameAborted = true;
+            return;
+        }
+
         for (int row = 0; row < ROWS; row++) {
-            if  (board[ROWS-row-1][column] == ' ') {
-                board[ROWS-row-1][column] = 'R';
+            if (board[ROWS - row - 1][column] == ' ') {
+                board[ROWS - row - 1][column] = 'R';
                 break;
             }
         }
     }
 
-    //Same as the above step, just yellow
-    public void dropYellowCoin()
-    {
-        System.out.println("Drop a yellow disk at column (0–7): ");
+    public void dropYellowCoin() {
+        System.out.println("Drop a yellow disk at column (0–7) [or " + EXIT_CODE + " to quit]: ");
         int column = columnInputInterface.getColumn();
 
+        // Überprüfung auf Abbruch-Code
+        if (column == EXIT_CODE) {
+            gameAborted = true;
+            return;
+        }
+
         for (int row = 0; row < ROWS; row++) {
-            if  (board[ROWS-row-1][column] == ' ') {
-                board[ROWS-row-1][column] = 'Y';
+            if (board[ROWS - row - 1][column] == ' ') {
+                board[ROWS - row - 1][column] = 'Y';
                 break;
             }
         }
@@ -170,36 +177,27 @@ public class FourConnectApp {
     }
 
     public Character runGame() {
-        // initial phase
-        //Time to create the board
         initBoard();
-
-        //Time to make a condition for our game to keep on
-        //playing
         boolean loop = true;
-        //We need something to keep track of whose turn it is
         int count = 0;
-
         printBoard();
-
         Character winner = null;
+        gameAborted = false; // Zurücksetzen bei Spielstart
 
-        // run the game
-        while(loop)
-        {
-            //Let's say that Red gets the first turn and thus
-            //every other turn
+        while (loop) {
             if (isRedTurn()) dropRedCoin();
             else dropYellowCoin();
 
+            // Falls James Bond das Spiel abgebrochen hat:
+            if (gameAborted) {
+                System.out.println("Game aborted by James Bond.");
+                return null; // Keine Gewinner, Spiel bricht ab
+            }
+
             switchCoin();
-
-            count++;//We want to keep track of the turns
-
+            count++;
             printBoard();
 
-            //Let's check for a winner during every
-            //turn made and say who it is
             winner = checkWinner();
             loop = false;
 
