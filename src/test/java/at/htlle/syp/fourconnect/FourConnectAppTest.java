@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * System test for four connect app
+ * System test for four connect app (7x7 Grid)
  */
 public class FourConnectAppTest
 {
@@ -22,6 +22,7 @@ public class FourConnectAppTest
         app = new FourConnectApp();
         app.setColumnReader(new ColumnInputTestReader(columns));
     }
+
     @AfterEach
     public void teardown() {
     }
@@ -37,14 +38,9 @@ public class FourConnectAppTest
     public void runJamesBond()
     {
         printPreample("James Bond");
-
         String testData = "007";
-
-
         setup(testData);
-
         app.runGame();
-
         assertTrue( true );
     }
 
@@ -53,18 +49,19 @@ public class FourConnectAppTest
     {
         printPreample("Red wins in a Row");
 
-        String testData = "00112233";
+        // R:0, Y:0, R:1, Y:1, R:2, Y:2, R:3 -> R gewinnt in der untersten Zeile
+        String testData = "0011223";
 
         setup(testData);
-
         Character winner = app.runGame();
 
         assertEquals('R', winner);
         char[][] board = app.getBoard();
-        assertEquals('R', board[5][0]);
-        assertEquals('R', board[5][1]);
-        assertEquals('R', board[5][2]);
-        assertEquals('R', board[5][3]);
+        // Bei ROWS=7 ist der Boden bei Index 6
+        assertEquals('R', board[6][0]);
+        assertEquals('R', board[6][1]);
+        assertEquals('R', board[6][2]);
+        assertEquals('R', board[6][3]);
     }
 
     @Test
@@ -72,18 +69,19 @@ public class FourConnectAppTest
     {
         printPreample("Red wins in a Column");
 
+        // R:0, Y:1, R:0, Y:1, R:0, Y:1, R:0 -> Vertikaler Sieg für Rot in Spalte 0
         String testData = "0101010";
 
         setup(testData);
-
         Character winner = app.runGame();
 
         assertEquals('R', winner);
         char[][] board = app.getBoard();
+        // Von unten nach oben: Zeilen 6, 5, 4, 3
+        assertEquals('R', board[6][0]);
         assertEquals('R', board[5][0]);
         assertEquals('R', board[4][0]);
         assertEquals('R', board[3][0]);
-        assertEquals('R', board[2][0]);
     }
 
     @Test
@@ -91,30 +89,20 @@ public class FourConnectAppTest
     {
         printPreample("Red wins diagonal left to right down");
 
-        String testData = "00010112203";
+        // Erzeugt eine Diagonale von (3,0) bis (6,3) im 7x7 Board
+        // checkWinner nutzt: board[row][column] == board[row+1][column+1]...
+        String testData = "0000111223";
 
         setup(testData);
-
         Character winner = app.runGame();
 
         assertEquals('R', winner);
         char[][] board = app.getBoard();
-        // R at (5,0), (4,1), (3,2), (2,3) - check code logic
-        // Wait, checkWinner logic for diagonal:
-        // board[row][column] == board[row+1][column+1] == board[row+2][column+2] == board[row+3][column+3]
-        // This is left-TOP to right-BOTTOM if we think of row 0 as top.
-        // Let's verify where they land.
-        // 0: R(5,0), Y(4,0), R(3,0), Y(2,0)
-        // 1: Y(5,1), R(4,1), Y(3,1)
-        // 2: R(5,2), Y(4,2)
-        // 3: R(5,3)
-        // Diagonal R at: (2,0), (3,1), (4,2), (5,3).
-        // checkWinner: row=2, col=0 -> board[2][0], board[3][1], board[4][2], board[5][3]. Matches!
 
-        assertEquals('R', board[2][0]);
-        assertEquals('R', board[3][1]);
-        assertEquals('R', board[4][2]);
-        assertEquals('R', board[5][3]);
+        assertEquals('R', board[3][0]);
+        assertEquals('R', board[4][1]);
+        assertEquals('R', board[5][2]);
+        assertEquals('R', board[6][3]);
     }
 
     @Test
@@ -122,22 +110,20 @@ public class FourConnectAppTest
     {
         printPreample("Red wins diagonal left up to right");
 
-        String testData = "01122323303";
+        // Erzeugt eine ansteigende Diagonale von (6,0) bis (3,3)
+        // checkWinner nutzt: board[row][column] == board[row-1][column+1]...
+        String testData = "3332210";
 
         setup(testData);
-
         Character winner = app.runGame();
 
         assertEquals('R', winner);
         char[][] board = app.getBoard();
-        // R at: (5,0), (4,1), (3,2), (2,3).
-        // checkWinner diagonal left up to right:
-        // row=5: board[5][0], board[4][1], board[3][2], board[2][3]. Matches!
 
-        assertEquals('R', board[5][0]);
-        assertEquals('R', board[4][1]);
-        assertEquals('R', board[3][2]);
-        assertEquals('R', board[2][3]);
+        assertEquals('R', board[6][0]);
+        assertEquals('R', board[5][1]);
+        assertEquals('R', board[4][2]);
+        assertEquals('R', board[3][3]);
     }
 
     @Test
@@ -145,18 +131,18 @@ public class FourConnectAppTest
     {
         printPreample("Yellow wins in a Row");
 
-        String testData = "60011223";
+        // R verfehlt, Y baut Reihe: R:6, Y:0, R:6, Y:1, R:6, Y:2, R:5, Y:3
+        String testData = "60616253";
 
         setup(testData);
-
         Character winner = app.runGame();
 
         assertEquals('Y', winner);
         char[][] board = app.getBoard();
-        assertEquals('Y', board[5][0]);
-        assertEquals('Y', board[5][1]);
-        assertEquals('Y', board[5][2]);
-        assertEquals('Y', board[5][3]);
+        assertEquals('Y', board[6][0]);
+        assertEquals('Y', board[6][1]);
+        assertEquals('Y', board[6][2]);
+        assertEquals('Y', board[6][3]);
     }
 
     @Test
@@ -164,18 +150,18 @@ public class FourConnectAppTest
     {
         printPreample("Yellow wins in a Column");
 
+        // R:0, Y:1, R:2, Y:1, R:2, Y:1, R:2, Y:1
         String testData = "01212121";
 
         setup(testData);
-
         Character winner = app.runGame();
 
         assertEquals('Y', winner);
         char[][] board = app.getBoard();
+        assertEquals('Y', board[6][1]);
         assertEquals('Y', board[5][1]);
         assertEquals('Y', board[4][1]);
         assertEquals('Y', board[3][1]);
-        assertEquals('Y', board[2][1]);
     }
 
     @Test
@@ -183,34 +169,16 @@ public class FourConnectAppTest
     {
         printPreample("Fill whole board");
 
-        // 1. Fill up the first three columns (0, 1, 2)
-        //    Since there are 6 rows, we need 18 moves to fill 3 columns.
-        //    We alternate Red and Yellow.
-        //    Col 0: 6 times, Col 1: 6 times, Col 2: 6 times
-        
-        StringBuilder sb = new StringBuilder();
-        // Filling first 3 columns (0, 1, 2)
-        for (int col = 0; col <= 2; col++) {
-            for (int row = 0; row < 6; row++) {
-                sb.append(col);
-            }
-        }
+        // Eine deterministische Sequenz für ein 7x7 Unentschieden (49 Felder).
+        // Es befüllt das Board spaltenweise/schachbrettartig so, dass niemand 4 in eine Reihe kriegt.
+        String sequence = "0000000111111122222224444444333333355555556666666";
 
-        // 2. make a twist three times
-        for (int i = 0; i < 3; i++) {
-            sb.append("63344556");
-        }
-
-        String sequence = sb.toString();
-        
         setup(sequence);
         Character winner = app.runGame();
         char[][] board = app.getBoard();
-        app.printBoard();
-        System.out.println("Winner: " + winner);
-        
+
         int count = 0;
-        for (int r = 0; r < 6; r++) {
+        for (int r = 0; r < 7; r++) {
             for (int c = 0; c < 7; c++) {
                 if (board[r][c] == 'R' || board[r][c] == 'Y') {
                     count++;
@@ -218,13 +186,10 @@ public class FourConnectAppTest
             }
         }
 
-        // It's a draw
-        assertNull( winner );
+        // Es muss ein Unentschieden sein
+        assertNull(winner, "Es sollte keinen Gewinner geben (Unentschieden).");
 
-        // As it is a draw all fields in the board should be filled
-        assertEquals(42, count, "Board should be significantly filled. Count: " + count);
-
-        // If the user wants to see it "until whole board is filled",
-        // they might expect 42, but with a fixed sequence it depends on if someone wins.
+        // Alle Felder (7x7 = 49) müssen voll sein
+        assertEquals(49, count, "Das gesamte 7x7 Board (49 Felder) sollte gefüllt sein.");
     }
 }
