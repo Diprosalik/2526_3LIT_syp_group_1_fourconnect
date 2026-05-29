@@ -89,7 +89,7 @@ public class FourConnectAppTest
     {
         printPreample("Red wins diagonal left to right down");
 
-        // Erzeugt eine Diagonale von (3,0) bis (6,3) im 7x7 Board
+        // erzeugt eine Diagonale von (3,0) bis (6,3) im 7x7 Board
         // checkWinner nutzt: board[row][column] == board[row+1][column+1]...
         String testData = "0000111223";
 
